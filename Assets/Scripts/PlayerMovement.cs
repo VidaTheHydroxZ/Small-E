@@ -18,12 +18,12 @@ public class PlayerMovement : MonoBehaviour
     private float dirX = 0f;
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 14f;
-
+    /*
     private bool moveLeft = false;
     private bool moveRight = false;
     private bool moveUp = false;
     private float horizontalMove;
-
+    */
     private enum MovementState { idle, running, jumping, falling }
 
     [SerializeField] private AudioSource jumpSoundEffect;
@@ -35,11 +35,12 @@ public class PlayerMovement : MonoBehaviour
         coll = GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        moveLeft = false;
-        moveRight = false;
+        //moveLeft = false;
+        //moveRight = false;
         
     }
-    
+    // Code for Android 
+    /*
     public void PointerUpLeft()
     {
         moveLeft = false;
@@ -64,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
     {
         moveUp = false;
     }
-
+    
     private void MovementPlayer()
     {
         if (moveLeft)
@@ -89,14 +90,17 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-    
+    */
     // Update is called once per frame
     private void Update()
     {
-        
+        // Code for Android
+        /*
         MovementPlayer();
         rb.velocity = new Vector2(horizontalMove, rb.velocity.y);
-        /*
+        */
+
+        // Code for Windows 
         dirX = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
         if ((PlayerStamina > 2f && Input.GetButtonDown("Jump")) && IsGrounded())
@@ -105,7 +109,7 @@ public class PlayerMovement : MonoBehaviour
             jumpSoundEffect.Play();
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
-        */
+        
         if (PlayerStamina < 0f && Input.GetButtonDown("Jump") == true)
         {
             
@@ -126,7 +130,8 @@ public class PlayerMovement : MonoBehaviour
     {
         
         MovementState state;
-        
+        /*
+        // Code for Android
         if (horizontalMove > 0f)
         {
             state = MovementState.running;
@@ -141,8 +146,8 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.idle;
         }
-        
-        /*
+        */
+        // Code for Windows
         if (dirX > 0f)
         {
             state = MovementState.running;
@@ -157,7 +162,7 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.idle;
         }
-        */
+        
         if (rb.velocity.y > .1f)
         {
             state = MovementState.jumping;
@@ -174,5 +179,5 @@ public class PlayerMovement : MonoBehaviour
     {
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
     }
-
+    
 }
