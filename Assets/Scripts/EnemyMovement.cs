@@ -7,57 +7,49 @@ using UnityEngine.U2D;
 
 public class EnemyMovement : MonoBehaviour
 {
+    private float dirX;
+    [SerializeField]private float moveSpeed;
     private Animator anim;
-    public float moveSpeed;
-    private Rigidbody2D myRigidbody;
-    private bool moving;
-    public float timeBetweenMove;
-    private float timeBetweenMoveCounter;
-    public float timeToMove;
-    private float timeToMoveCounter;
-    private Vector3 moveDirection;
+    private Rigidbody2D rb;
+    private Vector3 localScale;
+    private bool facingRight = false;
+    private Transform target;
+    private bool moving = true;
+
 
     private void Start()
     {
+        localScale = transform.localScale;  
         anim = GetComponent<Animator>();
-        myRigidbody = GetComponent<Rigidbody2D>();
-        timeBetweenMoveCounter = timeBetweenMove;
-        timeToMoveCounter = timeToMove;
+        rb = GetComponent<Rigidbody2D>();
+        dirX = -1f;
+        moveSpeed = 7f;
+        
+
     }
    
 
     void Update()
     {
-        if (moving)
-        {
-            timeToMoveCounter -= Time.deltaTime;
-            myRigidbody.velocity = moveDirection;
-
-            anim.SetBool("PigWalking", true);
-            anim.SetFloat("xMov", moveDirection.normalized.x);
-
-            if (timeToMoveCounter < 0f)
-            {
-                moving = false;
-                anim.SetBool("isWalking", false);
-                timeBetweenMoveCounter = timeBetweenMove;
-            }
-        }
-        else
-        {
-            timeBetweenMoveCounter -= Time.deltaTime;
-            myRigidbody.velocity = Vector2.zero;
-
-            if (timeBetweenMoveCounter < 0f)
-            {
-                moving = true;
-                timeToMoveCounter = timeToMove;
-
-                if (Random.value >= 0.5f) //random boolean
-                {
-                    moveDirection = new Vector3(Random.Range(-1f, 1f) * moveSpeed, 0f, 0f);
-                }
-            }
-        }
+        rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
+       
+        CheckWhereToFace();
     }
+
+
+    void CheckWhereToFace()
+    {
+        if (dirX > 0)
+        {
+            facingRight = true;
+        }
+        else if (dirX < 0)
+            facingRight = false;
+
+        if (((facingRight) && (localScale.x < 0)) || ((!facingRight) && (localScale.x > 0)))
+            localScale.x *= -1;
+
+        transform.localScale = localScale;
+    }
+
 }

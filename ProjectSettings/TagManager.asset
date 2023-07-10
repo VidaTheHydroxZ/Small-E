@@ -9,6 +9,9 @@ TagManager:
   - Saw
   - CinemachineTarget
   - CircleJump
+  - FallDetector
+  - Checkpoint
+  - EnemyHeadCheck
   layers:
   - Default
   - TransparentFX
